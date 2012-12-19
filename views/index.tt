@@ -1,0 +1,45 @@
+<script type="text/javascript">
+ function loadval(){
+  $.getJSON("/stats", 
+   function(data) {
+    $.each(data, function(key, value) { 
+     $("#"+key).html("<pre>" + value + "</pre>");
+    });
+    $("#loadavg").removeClass();
+    $("#freq").removeClass();
+    $("#temp").removeClass();
+    if (data.loadavg >= 0.8) {
+     $("#loadavg").addClass("failure");
+    }
+    if (parseInt(data.freq) > 500) {
+     $("#freq").addClass("failure");
+    }
+    if (parseInt(data.temp) > 70) {
+     $("#temp").addClass("failure");
+    }
+    $("#time").text(data.time + " - Uptime: " + data.uptime);
+   })
+   .success(function() { $("#status").text("Connected"); })
+   .error(function() { $("#status").text("Disconnected"); });
+  setTimeout("loadval()",<%refresh_time%>);
+ }
+ $(document).ready(function(){ 
+  loadval();
+ });
+</script>
+
+<p class='logo'>
+<img src="/images/sprite.png">
+</p>
+<p id='time'></p>
+<p id='status'></p>
+<div id='about-content'>
+<table>
+<tr>
+<%FOREACH stat IN data %><th><% stat %></th> 
+<%END%></tr>
+<tr>
+<%FOREACH stat IN data %><td id='<% stat %>'></td> 
+<%END%></tr>
+</table>
+</div>

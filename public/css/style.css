@@ -1,0 +1,62 @@
+
+body {
+margin: 0;
+margin-bottom: 25px;
+padding: 0;
+background-color: #ddd;
+background-image: url("/images/perldancer-bg.jpg");
+background-repeat: no-repeat;
+background-position: center;
+font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+font-size: 13px;
+color: #333;
+}
+.logo {
+float:left;
+}
+#page {
+background-color: #ddd;
+width: 750px;
+margin: auto;
+margin-left: auto;
+padding-left: 0px;
+margin-right: auto;
+}
+#content {
+background-color: white;
+border: 3px solid #aaa;
+border-top: none;
+padding: 2px;
+width: 1024px;
+}
+#about-content {
+clear:both;
+}
+#about-content table {
+border: 1px solid black;
+margin-top: 1px;
+margin-bottom: 1px;
+margin-left: 10px;
+font-size: 11px;
+}
+#about-content td {
+padding: 3px;
+vertical-align:top;
+}
+#about-content td,th {
+border: 1px solid black;
+}
+#about-content td.failure {
+background-color: Red;
+}
+#footer {
+clear: both;
+padding-top: 2em;
+text-align: center;
+padding-right: 160px;
+font-family: sans-serif;
+font-size: 10px;
+}
+pre {
+margin: 1px;
+}
