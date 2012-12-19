@@ -19,8 +19,8 @@
     }
     $("#time").text(data.time + " - Uptime: " + data.uptime);
    })
-   .success(function() { $("#status").text("Connected"); })
-   .error(function() { $("#status").text("Disconnected"); });
+   .success(function(data) { $("#status").text("Connected").removeClass(); $("#version").text("Version "+data.version);})
+   .error(function(data) { $("#status").text("Disconnected").removeClass().addClass("failure"); });
   setTimeout("loadval()",<%refresh_time%>);
  }
  $(document).ready(function(){ 
@@ -33,6 +33,8 @@
 </p>
 <p id='time'></p>
 <p id='status'></p>
+<p id='version'></p>
+<p><a href="http://github.com/architek/pistat">Code on Github</a></p>
 <div id='about-content'>
 <table>
 <tr>

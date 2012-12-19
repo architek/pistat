@@ -9,7 +9,7 @@ use Unix::Uptime;
 #use Proc::ProcessTable;
 use POSIX;
 
-our $VERSION = "1.0";
+our $VERSION = "1.1";
 
 set serializer => 'JSON';
 set template   => 'template_toolkit';
@@ -31,6 +31,7 @@ get '/' => sub {
 my $ofork=0;
 sub get_stats {
     my $res;
+    $res->{version} = $VERSION;
     $res->{time}    = scalar localtime;
 
     my $uptime= Unix::Uptime->uptime;
@@ -70,7 +71,7 @@ sub get_stats {
      my %seen=map{$_=>1}@ot;             #transform into a hash aka do a uniq
      delete $seen{'00000000'};           #delete some unwanted address
      for my $k (keys %seen) {
-	delete $seen{$k} if $k=~/C0A8$/ or $k=~/0A$/;   #192.168.xxxx, 10.xx
+	delete $seen{$k} if $k=~/A8C0$/ or $k=~/0A$/;   #192.168.xxxx, 10.xx
      }
     $res->{peers}=keys %seen;
     #$res->{peers}=join("\n",keys %seen);
