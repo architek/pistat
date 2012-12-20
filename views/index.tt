@@ -41,4 +41,13 @@
 <%FOREACH stat IN data %><td class='pre value' id='<% stat %>'></td> 
 <%END%></tr>
 </table>
+<br>
+<table>
+<tr>
+<%FOREACH stat IN gpio %><th><% stat %></th> 
+<%END%></tr>
+<tr>
+<%FOREACH stat IN gpio %><td class='pre value' id='<% stat %>'></td> 
+<%END%></tr>
+</table>
 </div>

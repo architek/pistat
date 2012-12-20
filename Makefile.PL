@@ -14,7 +14,9 @@ WriteMakefile(
     PREREQ_PM => {
         'Test::More' => 0,
         'YAML'       => 0,
-        'Dancer'     => 1.311,
+        'Dancer'     => 0,
+        'Unix::Uptime' => 0,
+        'Device::BCM2835' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'pista-*' },
