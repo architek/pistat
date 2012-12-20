@@ -91,9 +91,14 @@ ajax '/stats' => sub {
 };
 
 ajax '/config' => sub {
+    my @cpuinfo=read_file('/proc/cpuinfo');
+    my $cpuinfo=(split(': ',(grep(/^Revision/, @cpuinfo))[0]))[1];
     {
 	version => $VERSION,
-        uname => qx(uname -a),
+	rev     => $cpuinfo,
+        uname   => qx(uname -a),
+        lversion=> read_file('/proc/version'),
+        cmdline => read_file('/proc/cmdline'),
     };
 };
 
