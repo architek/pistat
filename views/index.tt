@@ -2,46 +2,43 @@
  function loadval(){
   $.getJSON("/stats", 
    function(data) {
-    $.each(data, function(key, value) { 
-     $("#"+key).html("<pre>" + value + "</pre>");
-    });
-    $("#loadavg").removeClass();
-    $("#freq").removeClass();
-    $("#temp").removeClass();
-    if (data.loadavg >= 0.8) {
-     $("#loadavg").addClass("failure");
-    }
-    if (parseInt(data.freq) > 500) {
-     $("#freq").addClass("failure");
-    }
-    if (parseInt(data.temp) > 70) {
-     $("#temp").addClass("failure");
-    }
-    $("#time").text(data.time + " - Uptime: " + data.uptime);
+    $(".value").each(function() { $(this).html(data[this.id])});
+    $("#loadavg").removeClass("failure");
+    $("#freq").removeClass("failure");
+    $("#temp").removeClass("failure");
+    if (data.loadavg >= 0.8) { $("#loadavg").addClass("failure"); }
+    if (parseInt(data.freq) > 500) { $("#freq").addClass("failure"); }
+    if (parseInt(data.temp) > 70) { $("#temp").addClass("failure"); }
    })
-   .success(function(data) { $("#status").text("Connected").removeClass(); $("#version").text("Version "+data.version);})
-   .error(function(data) { $("#status").text("Disconnected").removeClass().addClass("failure"); });
+   .success(function(data) { $("#conn").text("Connected").removeClass();})
+   .error(function(data) { $("#conn").text("Disconnected").removeClass().addClass("failure");});
   setTimeout("loadval()",<%refresh_time%>);
  }
  $(document).ready(function(){ 
+  $.getJSON("/config",
+   function(data) {
+    $(".value").each(function() { $(this).html(data[this.id])});
+  });
   loadval();
  });
 </script>
-
-<p class='logo'>
-<img src="/images/sprite.png">
-</p>
-<p id='time'></p>
-<p id='status'></p>
-<p id='version'></p>
-<p><a href="http://github.com/architek/pistat">Code on Github</a></p>
+<div>
+ <p class='logo'><img src="/images/sprite.png"></p>
+ <p>
+  <span class='value' id='time'></span> - <span class='value' id='uptime'></span> - <span class='value' id='conn'></span>
+ </p>
+ <p>
+  Version <span class='value' id='version'></span> - <span><a href="http://github.com/architek/pistat">Code on Github</a></span>
+ </p>
+ <p><span class='value' id='uname'></span></p>
+</div>
 <div id='about-content'>
 <table>
 <tr>
 <%FOREACH stat IN data %><th><% stat %></th> 
 <%END%></tr>
 <tr>
-<%FOREACH stat IN data %><td id='<% stat %>'></td> 
+<%FOREACH stat IN data %><td class='pre value' id='<% stat %>'></td> 
 <%END%></tr>
 </table>
 </div>

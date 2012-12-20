@@ -9,11 +9,12 @@ use Unix::Uptime;
 #use Proc::ProcessTable;
 use POSIX;
 
-our $VERSION = "1.1";
+our $VERSION = "1.2";
 
 set serializer => 'JSON';
 set template   => 'template_toolkit';
 
+#These are the data we want to put in the table. 
 my $data = [qw/loadavg ip entropy freq temp mem irq open_files open_tcp peers/];
 
 my $default_refresh = 5000;
@@ -28,12 +29,9 @@ get '/' => sub {
         refresh_time => $refresh,
       };
 };
-my $ofork=0;
 sub get_stats {
     my $res;
-    $res->{version} = $VERSION;
     $res->{time}    = scalar localtime;
-
     my $uptime= Unix::Uptime->uptime;
     my $days=$uptime/(3600*24);
     my $hours=($days-int($days))*24;
@@ -80,6 +78,13 @@ sub get_stats {
 
 ajax '/stats' => sub {
     get_stats;
+};
+
+ajax '/config' => sub {
+    {
+	version => $VERSION,
+        uname => qx(uname -a),
+    };
 };
 
 true;
