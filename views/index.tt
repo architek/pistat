@@ -22,8 +22,12 @@
   loadval();
  });
 </script>
-<div>
- <p class='logo'><img src="/images/sprite.png"></p>
+
+<div class='container'>
+ <div class='logo'>
+ <img width="225" src="/images/sprite.png">
+ </div>
+ <div class='right'>
  <p>
   <span class='value' id='time'></span> - <span class='value' id='uptime'></span> - <span class='value' id='conn'></span>
  </p>
@@ -32,7 +36,9 @@
  </p>
  <p><span class='value' id='uname'></span> - Revision <span class='value' id='rev'></span></p>
  <p><span class='value' id='lversion'></span> - <span class='value' id='cmdline'></span></p>
+ </div>
 </div>
+
 <div id='about-content'>
 <table>
 <tr>
