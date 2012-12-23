@@ -12,9 +12,12 @@
    })
    .success(function(data) { $("#conn").text("Connected").removeClass();})
    .error(function(data) { $("#conn").text("Disconnected").removeClass().addClass("failure");});
-  setTimeout("loadval()",<%refresh_time%>);
+  if ($("#stop").text() != 1) {
+   setTimeout("loadval()",<%refresh_time%>);
+  }
  }
  $(document).ready(function(){ 
+  $("#stop").hide();
   $.getJSON("/config",
    function(data) {
     $(".value").each(function() { $(this).html(data[this.id])});
@@ -25,7 +28,7 @@
 
 <div class='container'>
  <div class='logo'>
- <img width="225" src="/images/sprite.png">
+ <img width="225" src="/images/sprite.png"/>
  </div>
  <div class='right'>
  <p>
@@ -48,7 +51,7 @@
 <%FOREACH stat IN data %><td class='pre value' id='<% stat %>'></td> 
 <%END%></tr>
 </table>
-<br>
+<br/>
 <table>
 <tr>
 <%FOREACH stat IN gpio %><th><% stat %></th> 
@@ -58,3 +61,4 @@
 <%END%></tr>
 </table>
 </div>
+<p class='value' id='stop'>0</p>

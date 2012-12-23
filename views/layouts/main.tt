@@ -16,7 +16,7 @@
 <body>
 <% content %>
 <div id="footer">
-<img src="images/perldancer.jpg" alt="Powered by Perl Dancer"> 
+<img src="images/perldancer.jpg" alt="Powered by Perl Dancer"/>
 </div>
 </body>
 </html>
