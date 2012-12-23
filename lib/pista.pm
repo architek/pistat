@@ -3,6 +3,7 @@ use warnings;
 
 package pista;
 use Dancer ':syntax';
+use Log::Log4perl qw< :easy >;
 use Dancer::Plugin::Ajax;
 use File::Slurp;
 use Unix::Uptime;
@@ -11,9 +12,29 @@ use POSIX;
 use Device::BCM2835;
 
 our $VERSION = "1.2";
+my $stop=0;
 
 set serializer => 'JSON';
 set template   => 'template_toolkit';
+setting log4perl => {
+   tiny => 0,
+   config => '
+      log4perl.logger                      = ERROR, OnFile, OnScreen
+      log4perl.appender.OnFile             = Log::Log4perl::Appender::File
+      log4perl.appender.OnFile.filename    = logs/sample-debug.log
+      log4perl.appender.OnFile.mode        = append
+      log4perl.appender.OnFile.layout      = Log::Log4perl::Layout::PatternLayout
+      log4perl.appender.OnFile.layout.ConversionPattern = [%d] [%5p] %m%n
+      log4perl.appender.OnScreen           = Log::Log4perl::Appender::ScreenColoredLevels
+      log4perl.appender.OnScreen.color.ERROR = bold red
+      log4perl.appender.OnScreen.color.FATAL = bold red
+      log4perl.appender.OnScreen.color.OFF   = bold green
+      log4perl.appender.OnScreen.Threshold = ERROR
+      log4perl.appender.OnScreen.layout    = Log::Log4perl::Layout::PatternLayout
+      log4perl.appender.OnScreen.layout.ConversionPattern = [%d] >>> %m%n
+   ',
+};
+setting logger => 'log4perl';
 
 #These are the data we want to put in the table. 
 my $data = [qw/loadavg ip entropy freq temp mem irq open_files open_tcp peers/];
@@ -21,9 +42,16 @@ my $gpio = [qw/3 5 7 8 10 11 12 13 15 16 18 19 21 22 23 24 26/];
 
 my $default_refresh = 5000;
 
+sub stop_fn {
+ warn "USR1 triggered\n";
+ $stop=1;
+}
+$SIG{USR1} = \&stop_fn;
+
 get '/' => sub {
     my $refresh=params->{refresh} // $default_refresh;
     $refresh=1000 if $refresh<1000;
+    #warning sprintf ("/: add [%s], ua [%s], ref [%s]", request->remote_address(), request->user_agent(), request->referer()); 
 
     template 'index',
       {
@@ -71,12 +99,18 @@ sub get_stats {
      @ot=map(substr($_,0,8), @ot);       #and the first 8 chars
      my %seen=map{$_=>1}@ot;             #transform into a hash aka do a uniq
      delete $seen{'00000000'};           #delete some unwanted address
-     for my $k (keys %seen) {
-	delete $seen{$k} if $k=~/A8C0$/ or $k=~/0A$/;   #192.168.xxxx, 10.xx
-     }
+#    Uncomment to hide private adresses
+#     for my $k (keys %seen) {
+#	delete $seen{$k} if $k=~/A8C0$/ or $k=~/0A$/;   #192.168.xxxx, 10.xx
+#     }
     $res->{peers}=keys %seen;
     #$res->{peers}=join("\n",keys %seen);
     get_gpio($res);
+    $res->{stop}=$stop;
+    if ($stop) {
+	warn "Stop\n";
+        $stop=0;
+    } 
     $res;
 }
 sub get_gpio{
@@ -88,9 +122,11 @@ sub get_gpio{
 
 ajax '/stats' => sub {
     get_stats;
+#    error sprintf ("/stats: add [%s], ua [%s], ref [%s]", request->remote_address(), request->user_agent(), request->referer()); 
 };
 
 ajax '/config' => sub {
+    error sprintf ("/config: add [%s], ua [%s], ref [%s]", request->remote_address(), request->user_agent(), request->referer()); 
     my @cpuinfo=read_file('/proc/cpuinfo');
     my $cpuinfo=(split(': ',(grep(/^Revision/, @cpuinfo))[0]))[1];
     {
