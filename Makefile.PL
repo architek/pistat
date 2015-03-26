@@ -11,7 +11,7 @@ requires 'Log::Log4perl' => '0';
 requires 'Dancer::Logger::Log4perl' => '0';
 requires 'File::Slurp' => '0';
 requires 'Unix::Uptime' => '0';
-#requires 'Device::BCM2835' => '0';
+requires 'Device::BCM2835' => '0';
 requires 'Template' => '0';
 requires 'YAML' => '0';
 
