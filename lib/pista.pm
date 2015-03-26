@@ -21,7 +21,7 @@ setting log4perl => {
    config => '
       log4perl.logger                      = ERROR, OnFile, OnScreen
       log4perl.appender.OnFile             = Log::Log4perl::Appender::File
-      log4perl.appender.OnFile.filename    = logs/sample-debug.log
+      log4perl.appender.OnFile.filename    = debug.log
       log4perl.appender.OnFile.mode        = append
       log4perl.appender.OnFile.layout      = Log::Log4perl::Layout::PatternLayout
       log4perl.appender.OnFile.layout.ConversionPattern = [%d] [%5p] %m%n
@@ -128,7 +128,12 @@ ajax '/stats' => sub {
 ajax '/config' => sub {
     error sprintf ("/config: add [%s], ua [%s], ref [%s]", request->remote_address(), request->user_agent(), request->referer()); 
     my @cpuinfo=read_file('/proc/cpuinfo');
-    my $cpuinfo=(split(': ',(grep(/^Revision/, @cpuinfo))[0]))[1];
+    my ($cpuinfo) = grep /^Revision/, @cpuinfo;
+    if ($cpuinfo) {
+       $cpuinfo=(split(': ',$cpuinfo))[1];
+    } else {
+       $cpuinfo="NA";
+    }
     {
 	version => $VERSION,
 	rev     => $cpuinfo,
