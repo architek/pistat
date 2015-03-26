@@ -37,7 +37,7 @@
  <p>
   Version <span class='value' id='version'></span> - <span><a href="http://github.com/architek/pistat">Code on Github</a></span>
  </p>
- <p><span class='value' id='uname'></span> - Revision <span class='value' id='rev'></span></p>
+ <p><span class='value' id='uname'></span> - RaspberryPi Revision <span class='value' id='rev'></span></p>
  <p><span class='value' id='lversion'></span> - <span class='value' id='cmdline'></span></p>
  </div>
 </div>
