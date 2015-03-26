@@ -11,7 +11,7 @@ use Unix::Uptime;
 use POSIX;
 use Device::BCM2835;
 
-our $VERSION = "1.3";
+our $VERSION = "1.4";
 my $stop=0;
 
 set serializer => 'JSON';
